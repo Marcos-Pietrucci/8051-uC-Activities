@@ -17,6 +17,8 @@ SETUP:		;Configurar as interrupções
 		;Inicia o teste, baixar o recipiente
 		SETB	P2.7
 		SETB	P2.6
+		CLR	P1.2	;Desliga aquecimento
+		CLR	P1.0	;Desliga resfriamento
 
 		;Contador de vezes
 		MOV	R3, #0H
@@ -53,15 +55,14 @@ Delay500:
 ; START: Wait loop, time: 500 ms
 ; Clock: 12000.0 kHz (12 / MC)
 ; Used registers: R0, R1, R2
-	MOV	R2, #004h
-	MOV	R1, #0FAh
-	MOV	R0, #0F8h
-	NOP
-	DJNZ	R0, $
-	DJNZ	R1, $-5
-	DJNZ	R2, $-9
-	RET
+		MOV	R2, #004h
+		MOV	R1, #0FAh
+		MOV	R0, #0F8h
+		NOP
+		DJNZ	R0, $
+		DJNZ	R1, $-5
+		DJNZ	R2, $-9
+		RET
 ; Rest: -13.0 us
-
 END
 
