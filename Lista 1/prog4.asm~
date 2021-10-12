@@ -1,0 +1,48 @@
+		ORG 0000H
+		SJMP SETUP
+
+		ORG 0003H
+		SJMP EXT_0
+
+		ORG 0013H
+		SJMP EXT_1
+
+SETUP:		;Configurar as interrupções
+		SETB EA
+		SETB EX0
+		SETB EX1
+		SETB IT0
+		SETB IT1
+
+
+
+
+
+
+		SJMP	$
+
+;*********************************************************
+EXT_0:		;Presenca do recipiente
+		
+
+;*********************************************************
+EXT_1:
+	
+
+;**********************************************************
+
+Delay500:
+; START: Wait loop, time: 500 ms
+; Clock: 12000.0 kHz (12 / MC)
+; Used registers: R0, R1, R2
+	MOV	R2, #004h
+	MOV	R1, #0FAh
+	MOV	R0, #0F8h
+	NOP
+	DJNZ	R0, $
+	DJNZ	R1, $-5
+	DJNZ	R2, $-9
+; Rest: -13.0 us
+
+END
+

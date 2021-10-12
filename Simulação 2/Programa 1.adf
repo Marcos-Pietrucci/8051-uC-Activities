@@ -1,0 +1,21 @@
+# Assembler debug file for MCU 8051 IDE v1.4.9
+# Used assembler: MCU 8051 IDE
+# Date: 09/01/2021
+C0F3686B240231F8AF5FCB2C1E41855A "C:/Users/MarcosViníciusFirmin/Desktop/6º Período/Microprocessadores e Aplicações/Simulação 2/Programa 1.asm" 
+0 9 0 228
+0 10 1 144 0 26
+0 11 4 147
+0 12 5 245 48
+0 13 7 163
+0 14 8 228
+0 15 9 147
+0 17 10 181 48 0
+0 19 13 144 18 0
+0 20 16 64 5
+0 21 18 229 48
+0 22 20 240
+0 23 21 128 1
+0 25 23 240
+0 27 24 128 254
+0 30 26 58
+0 30 27 163
