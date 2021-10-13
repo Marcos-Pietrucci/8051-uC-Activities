@@ -3,10 +3,10 @@ prog4                                                                           
 0000 8013                2                     SJMP SETUP
                          3
                          4                     ORG 0003H
-0003 8025                5                     SJMP EXT_0
+0003 8029                5                     SJMP EXT_0
                          6
                          7                     ORG 0013H
-0013 8022                8                     SJMP EXT_1
+0013 8026                8                     SJMP EXT_1
                          9
                         10     SETUP:          ;Configurar as interrupções
 0015 D2AF               11                     SETB EA
@@ -18,52 +18,54 @@ prog4                                                                           
                         17                     ;Inicia o teste, baixar o recipiente
 001F D2A7               18                     SETB    P2.7
 0021 D2A6               19                     SETB    P2.6
-                        20
-                        21                     ;Contador de vezes
-0023 7B00               22                     MOV     R3, #0H
-                        23
-                        24                     ;Garantir que o processo ocorra 3 vezes
-0025 BB03FD             25                     CJNE    R3, #3H, $
-                        26
-0028 80FE               27                     SJMP    $
+0023 C292               20                     CLR     P1.2    ;Desliga aquecimento
+0025 C290               21                     CLR     P1.0    ;Desliga resfriamento
+                        22
+                        23                     ;Contador de vezes
+0027 7B00               24                     MOV     R3, #0H
+                        25
+                        26                     ;Garantir que o processo ocorra 3 vezes
+0029 BB03FD             27                     CJNE    R3, #3H, $
                         28
-                        29     ;*********************************************************
-                        30     EXT_0:          ;Presenca do recipiente para aquecer
-002A C2A6               31                     CLR     P2.6            ;Parar o motor
-002C D292               32                     SETB    P1.2            ;Liga aquecimento
-002E 1144               33                     ACALL   Delay500
-0030 C292               34                     CLR     P1.2            ;Desliga aquecimento
-0032 C2A7               35                     CLR     P2.7            ;Inverte sentido do motor
-0034 D2A6               36                     SETB    P2.6            ;Liga motor
-0036 32                 37                     RETI
-                        38
-                        39     ;*********************************************************
-                        40     EXT_1:          ;Presença de recipiente para resfriar
-0037 C2A6               41                     CLR     P2.6            ;Parar o motor
-0039 D290               42                     SETB    P1.0            ;Liga resfriamento
-003B 1144               43                     ACALL   Delay500
-003D C290               44                     CLR     P1.0            ;Desliga resfriamento
-003F D2A7               45                     SETB    P2.7            ;Inverte sentido do motor
-0041 D2A6               46                     SETB    P2.6            ;Liga motor
-                        47
-0043 0B                 48                     INC     R3              ;Incrementa o contador de vezes
+002C 80FE               29                     SJMP    $
+                        30
+                        31     ;*********************************************************
+                        32     EXT_0:          ;Presenca do recipiente para aquecer
+002E C2A6               33                     CLR     P2.6            ;Parar o motor
+0030 D292               34                     SETB    P1.2            ;Liga aquecimento
+0032 1148               35                     ACALL   Delay500
+0034 C292               36                     CLR     P1.2            ;Desliga aquecimento
+0036 C2A7               37                     CLR     P2.7            ;Inverte sentido do motor
+0038 D2A6               38                     SETB    P2.6            ;Liga motor
+003A 32                 39                     RETI
+                        40
+                        41     ;*********************************************************
+                        42     EXT_1:          ;Presença de recipiente para resfriar
+003B C2A6               43                     CLR     P2.6            ;Parar o motor
+003D D290               44                     SETB    P1.0            ;Liga resfriamento
+003F 1148               45                     ACALL   Delay500
+0041 C290               46                     CLR     P1.0            ;Desliga resfriamento
+0043 D2A7               47                     SETB    P2.7            ;Inverte sentido do motor
+0045 D2A6               48                     SETB    P2.6            ;Liga motor
                         49
-                        50     ;**********************************************************
+0047 0B                 50                     INC     R3              ;Incrementa o contador de vezes
                         51
-                        52     Delay500:
-                        53     ; START: Wait loop, time: 500 ms
-                        54     ; Clock: 12000.0 kHz (12 / MC)
-                        55     ; Used registers: R0, R1, R2
-0044 7A04               56                     MOV     R2, #004h
-0046 79FA               57                     MOV     R1, #0FAh
-0048 78F8               58                     MOV     R0, #0F8h
-004A 00                 59                     NOP
-004B D8FE               60                     DJNZ    R0, $
-004D D9F9               61                     DJNZ    R1, $-5
-004F DAF5               62                     DJNZ    R2, $-9
-0051 22                 63                     RET
-                        64
-                        65     END
+                        52     ;**********************************************************
+                        53
+                        54     Delay500:
+                        55     ; START: Wait loop, time: 500 ms
+                        56     ; Clock: 12000.0 kHz (12 / MC)
+                        57     ; Used registers: R0, R1, R2
+0048 7A04               58                     MOV     R2, #004h
+004A 79FA               59                     MOV     R1, #0FAh
+004C 78F8               60                     MOV     R0, #0F8h
+004E 00                 61                     NOP
+004F D8FE               62                     DJNZ    R0, $
+0051 D9F9               63                     DJNZ    R1, $-5
+0053 DAF5               64                     DJNZ    R2, $-9
+0055 22                 65                     RET
+                        66     ; Rest: -13.0 us
+                        67     END
 ASSEMBLY COMPLETE, NO ERRORS FOUND, NO WARNINGS
 
 
@@ -121,7 +123,7 @@ CPRL2. . . . . . . . . . . . . . . .  B  ADDR  00C8H  NOT USED
 CR . . . . . . . . . . . . . . . . .  B  ADDR  00DEH  NOT USED
 CT2. . . . . . . . . . . . . . . . .  B  ADDR  00C9H  NOT USED
 CY . . . . . . . . . . . . . . . . .  B  ADDR  00D7H  NOT USED
-DELAY500 . . . . . . . . . . . . . .  C  ADDR  0044H
+DELAY500 . . . . . . . . . . . . . .  C  ADDR  0048H
 DP0H . . . . . . . . . . . . . . . .  D  ADDR  0083H  NOT USED
 DP0L . . . . . . . . . . . . . . . .  D  ADDR  0082H  NOT USED
 DP1H . . . . . . . . . . . . . . . .  D  ADDR  0085H  NOT USED
@@ -141,8 +143,8 @@ EXEN2. . . . . . . . . . . . . . . .  B  ADDR  00CBH  NOT USED
 EXF2 . . . . . . . . . . . . . . . .  B  ADDR  00CEH  NOT USED
 EXTI0. . . . . . . . . . . . . . . .  C  ADDR  0003H  NOT USED
 EXTI1. . . . . . . . . . . . . . . .  C  ADDR  0013H  NOT USED
-EXT_0. . . . . . . . . . . . . . . .  C  ADDR  002AH
-EXT_1. . . . . . . . . . . . . . . .  C  ADDR  0037H
+EXT_0. . . . . . . . . . . . . . . .  C  ADDR  002EH
+EXT_1. . . . . . . . . . . . . . . .  C  ADDR  003BH
 F0 . . . . . . . . . . . . . . . . .  B  ADDR  00D5H  NOT USED
 FE . . . . . . . . . . . . . . . . .  B  ADDR  009FH  NOT USED
 IE . . . . . . . . . . . . . . . . .  D  ADDR  00A8H  NOT USED

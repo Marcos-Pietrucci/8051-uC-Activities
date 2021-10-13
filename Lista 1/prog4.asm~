@@ -17,6 +17,8 @@ SETUP:		;Configurar as interrupções
 		;Inicia o teste, baixar o recipiente
 		SETB	P2.7
 		SETB	P2.6
+		CLR	P1.2	;Desliga aquecimento
+		CLR	P1.0	;Desliga resfriamento
 
 		;Contador de vezes
 		MOV	R3, #0H
@@ -61,9 +63,6 @@ Delay500:
 		DJNZ	R1, $-5
 		DJNZ	R2, $-9
 		RET
-
-END
 ; Rest: -13.0 us
-
 END
 
