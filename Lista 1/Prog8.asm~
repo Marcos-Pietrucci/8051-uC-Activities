@@ -41,10 +41,6 @@ finaliza:	;Mover para a RAM externa
 		MOV	A,R3
 		MOVX	@DPTR, A
 
-
-
-
-
 Valor: DB 54, 23, 88, 215, 189, 98, 8, 11, 28, 100
 
 END

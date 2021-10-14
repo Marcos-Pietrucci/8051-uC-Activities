@@ -23,7 +23,22 @@ continua:	MOVC	A, @A+DPTR		;Comando para mover valor
 Nro_Par:	MOV 	P1, R1
 
 		;Enviar serial com 9600,N,8,1.
+		;Configura transmissao serial
+		;Timer 1 usado na transmissão serial
+		SETB	ET1
+		MOV 	TMOD, #00100000b	;TC1 modo 2
+		;Calcular a taxa de comunicação
+		;Pelos valores dados:
+		MOV 	TL1, #250D	;TH1 = 256 −(110592∗10ˆ6)/(384∗4800) = 250
+		MOV	TH1, #250D
+		SETB	TR1
 
+		MOV	SCON, #40H ; Modo 1 do canal serial
+
+		MOV 	SBUF, A		;Transmite a frequencia
+
+		JNB	TI,$		;Espera transmissao
+		CLR	TI
 		INC	R2	;Armazena quantidade de pares
 
 Nro_impar:	MOV	P2, R1

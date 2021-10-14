@@ -36,7 +36,6 @@ ENVIA_SERIAL:	;Desabilita as interrupcoes indesejadas
 
 		;Configura transmissao seriala
 		;Timer 1 usado na transmissão serial
-		SETB	ET1
 		MOV 	TMOD, #00100000b	;TC1 modo 2
 		;Calcular a taxa de comunicação
 		;Pelos valores dados:
