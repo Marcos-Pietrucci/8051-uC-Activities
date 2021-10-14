@@ -59,14 +59,14 @@ ENVIA_SERIAL:	;Desabilita as interrupcoes indesejadas
 
 ;*********************************************************
 EXT_0:		INC 	DPTR
-		RET
+			RETI
 ;**********************************************************
 TC0:		INC	R0
 		CJNE	R0,#64H,VOLTA	;Contar 100 vezes interrupt de 10ms
 		SJMP	ENVIA_SERIAL
 VOLTA:		MOV	TH0, #0D8H
 		MOV	TL0, #0F0H
-		RET
+		RETI
 ;**********************************************************
 
 END

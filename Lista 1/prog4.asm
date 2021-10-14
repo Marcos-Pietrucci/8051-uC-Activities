@@ -48,6 +48,7 @@ EXT_1:		;Presença de recipiente para resfriar
 		SETB	P2.6		;Liga motor
 
 		INC	R3		;Incrementa o contador de vezes
+		RETI
 
 ;**********************************************************
 

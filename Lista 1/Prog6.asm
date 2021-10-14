@@ -47,25 +47,26 @@ EXT_0:		MOV	DPTR, #5000H
 		MOV	P1, A
 		MOV	A, R0
 		MOVX	@DPTR, A
-		RET
+		RETI
 
 ;*********************************************************
 EXT_1:		MOV	DPTR, #5000H
 		MOVX	A, @DPTR
 		MOV	7FH, A
-		RET
+		RETI
 
 ;**********************************************************
 TC0:		MOV	A, 7FH
 		MOV	DPTR, #5200H
 		MOVX	@DPTR, A
-		RET
+		RETI
 
 ;**********************************************************
 TC1:		MOV	DPTR, #5200H
 		MOVX	A,@DPTR
 		MOV	DPTR, #5000H
 		MOVX	@DPTR, A
+		RETI
 END
 
 
