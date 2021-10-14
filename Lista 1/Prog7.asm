@@ -39,11 +39,11 @@ ENVIA_SERIAL:	;Desabilita as interrupcoes indesejadas
 		MOV 	TMOD, #00100000b	;TC1 modo 2
 		;Calcular a taxa de comunicação
 		;Pelos valores dados:
-		MOV 	TL1, #250D	;TH1 = 256 −(110592∗10ˆ6)/(384∗4800) = 250
-		MOV	TH1, #250D
+		MOV 	TL1, #250D	;TH1 = 256 −(11,0592∗10ˆ6)/(384∗4800) = 250
+		MOV		TH1, #250D
 		SETB	TR1
 
-		MOV	SCON, #40H ; Modo 1 do canal serial
+		MOV		SCON, #40H ; Modo 1 do canal serial
 
 		MOV 	SBUF, A		;Transmite a frequencia
 
