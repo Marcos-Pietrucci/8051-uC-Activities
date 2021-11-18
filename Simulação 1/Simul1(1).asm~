@@ -1,6 +1,0 @@
-	ORG 0
-	MOV A, 30H
-	ADD A, 31H
-	MOV 32H, A
-FIM:	SJMP FIM
-	END
