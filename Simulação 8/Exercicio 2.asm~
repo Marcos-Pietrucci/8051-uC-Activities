@@ -65,7 +65,7 @@ ATIVA_1:	CJNE	R2, #1H, ATIVA_0
 		SETB	P2.1
 		RET
 
-ATIVA_0:	CJNE	R2, #0H, TESTA_2
+TESTA_0:	CJNE	R2, #0H, TESTA_2
 		SETB	P2.0
 		RET
 ;**********************************
