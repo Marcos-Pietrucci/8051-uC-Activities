@@ -1,101 +1,146 @@
 Exercicio 2                                                                                                             PAGE 1
-                         1     ;Para o contador, usarei dois registradores 8 bits R0 e R1
-                         2     ;R1 para os 2 mais significativos, R2
-                         3                     ORG     0H
-                         4                     SJMP    SETUP
+                         1     ;***********************************************
+                         2     ;*      Marcos Vinícius Firmino Pietrucci      *
+                         3     ;*      10770072                               *
+                         4     ;***********************************************
                          5
-                         6                     ORG     00BH
-                         7                     SJMP    TC0
-                         8
-                         9                     ORG     013H
-                        10                     ACALL   EXT_1
-                        11                     RETI
-                        12
-                        13     SETUP:          SETB    EA
-                        14                     SETB    EX1
-                        15                     SETB    IT1
-                        16                     MOV     R0, #0H         ;Limpa os contadores
-                        17                     MOV     R1, #0H
-                        18                     MOV     R2, #0H         ;Armazena qual o bit ativo
-                        19                     MOV     30H, #0H        ;Limpa o buffer
-                        20                     MOV     31H, #0H
-                        21                     MOV     32H, #0H
-                        22                     MOV     33H, #0H
-                        23                     MOV     P2, #00H        ;Limpa os ativadores
-                        24
-                        25     LOOP:           MOV     P2, #00H
-                        26                     ACALL   D7S
-                        27
-                        28
-                        29
-                        30     ;**********************************
-                        31     ;Função envia ao D7S os valores armazenados no buffer
-                        32     D7S:            MOV     DPTR,#TABELA
-                        33                     CJNE    R2, #3H, TESTA_2
-                        34                     MOV     A, 33H
-                        35                     SJMP    MOSTRA
-                        36
-                        37     TESTA_2:        CJNE    R2, #2H, TESTA_1
-                        38                     MOV     A, 32H
-                        39                     SJMP    MOSTRA
-                        40
-                        41     TESTA_1:        CJNE    R2, #1H, TESTA_0
-                        42                     MOV     A, 31H
-                        43                     SJMP    MOSTRA
-                        44
-                        45     TESTA_0:        MOV     A, 30H
-                        46                     SJMP    MOSTRA
-                        47
-                        48     MOSTRA:         MOVC    A, @A+DPTR
-                        49                     MOV     P1, A
-                        50
-                        51                     ACALL   ATIVA_D7S
-                        52                     RET
-0058 3F065B4F66         53     TABELA:         DB      3FH, 06H, 05BH, 4FH, 66H, 6DH, 7DH, 07H, 7FH, 6FH
-     6D7D077F6F
-                        54
-                        55     ;************************************
-                        56     ATIVA_D7S:      CJNE    R2, #3H, ATIVA_2
-                        57                     SETB    P2.3
-                        58                     RET
-                        59
-                        60     ATIVA_2:        CJNE    R2, #2H, ATIVA_1
-                        61                     SETB    P2.2
-                        62                     RET
-                        63
-                        64     ATIVA_1:        CJNE    R2, #1H, ATIVA_0
-****ERROR:Symbolnotdefined:ativa_0
-                        65                     SETB    P2.1
-                        66                     RET
-                        67
-                        68     TESTA_0:        CJNE    R2, #0H, TESTA_2
-****ERROR:Labelwasalreadydefined:`testa_0'
-                        69                     SETB    P2.0
-                        70                     RET
-                        71     ;**********************************
-                        72     TC0:            CLR     EA
-                        73                     MOV     R0, #31H
-                        74                     ;ACALL  DISPLAY_MUX
-                        75                     MOV     TH0, #0FFH
-                        76                     MOV     TL0, #0FFH
-                        77                     SETB    EA
-                        78                     RETI
+                         6     ; ****************** PROGRAMA 2 ***************
+                         7
+                         8     ; Para o contador, usarei dois registradores 8 bits R0 e R1
+                         9     ; R1 para os 2 mais significativos, R2 para os 2 leds menos significativos
+                        10     ; Buffer: 30H == LSB e 33H == MSB
+                        11     ; O bit 20H.0 armazena o estado do programa
+                        12     ; Fade out de 100
+                        13                     ORG     0H
+0000 8014               14                     SJMP    SETUP
+                        15
+                        16                     ORG     013H
+0013 0200C5             17                     JMP     EXT_1
+                        18
+0016 D2AF               19     SETUP:          SETB    EA              ;Configura interrupções
+0018 D2AA               20                     SETB    EX1
+001A D28A               21                     SETB    IT1
+                        22
+001C 7800               23                     MOV     R0, #0H         ;Contador menos significativo
+001E 7900               24                     MOV     R1, #0H         ;Contador mais significativo
+0020 7A00               25                     MOV     R2, #0H         ;Armazena qual o bit ativo
+0022 753000             26                     MOV     30H, #0H        ;Limpa o buffer
+0025 753100             27                     MOV     31H, #0H
+0028 753200             28                     MOV     32H, #0H
+002B 753300             29                     MOV     33H, #0H
+002E 75A0FF             30                     MOV     P2, #0FFH       ;Limpa os ativadores
+0031 7590FF             31                     MOV     P1, #0FFH
+0034 C200               32                     CLR     20H.0           ;Limpa o bit de parada
+                        33
+                        34
+0036 2000FD             35     LOOP:           JB      20H.0, $
+0039 75A000             36                     MOV     P2, #00H        ;Limpa os ativadores
+003C 759000             37                     MOV     P1, #00H        ;Limpa os leds
+003F 115D               38                     ACALL   CONV2BCD_R0     ;Converte para BCD e coloca no buffer
+0041 1168               39                     ACALL   CONV2BCD_R1     ;Converte para BCD e coloca no buffer
+0043 1173               40                     ACALL   D7S             ;Ativa todos os números
+0045 08                 41                     INC     R0
+                        42                     ;Faz os testes
+0046 B99900             43                     CJNE    R1, #99H, TESTE ;Veja se o contador mais significativo está em 99
+0049 500C               44     TESTE:          JNC     RESETA
+004B B89900             45                     CJNE    R0, #99H, TESTE2 ;Veja se o contador menos significativo está em 99
+004E 5002               46     TESTE2:         JNC     CARRY_CONT
+0050 80E4               47                     SJMP    LOOP
+                        48
+0052 09                 49     CARRY_CONT:     INC     R1
+0053 7800               50                     MOV     R0, #00H
+0055 80DF               51                     SJMP    LOOP
+                        52
+                        53     RESETA:         ;Reseta
+0057 7800               54                     MOV     R0, #0H         ;Limpa os contadores
+0059 7900               55                     MOV     R1, #0H
+005B 80D9               56                     SJMP    LOOP
+                        57     ;**********************************
+                        58     ;Função que converte o número no registrador R0 em BCD
+005D E8                 59     CONV2BCD_R0:    MOV     A, R0
+005E 75F00A             60                     MOV     B, #0AH
+0061 84                 61                     DIV     AB
+0062 F531               62                     MOV     31H, A  ; 31H = ISB1
+0064 85F030             63                     MOV     30H, B  ; 30H = LSB
+0067 22                 64                     RET
+                        65
+                        66     ;**********************************
+                        67     ;Função que converte o número no registrador R1 em BCD
+0068 E9                 68     CONV2BCD_R1:    MOV     A, R1
+0069 75F00A             69                     MOV     B, #0AH
+006C 84                 70                     DIV     AB
+006D F533               71                     MOV     33H, A  ; 33H = MSB
+006F 85F032             72                     MOV     32H, B  ; 32H = ISB2
+0072 22                 73                     RET
+                        74
+                        75     ;**********************************
+                        76     ;Função envia ao D7S os valores armazenados no buffer
+0073 90009E             77     D7S:            MOV     DPTR,#TABELA
+0076 7B00               78                     MOV     R3, #0H
                         79
-                        80     ;**********************************
-                        81     EXT_1:          JNB     20H.0, ATIVA_BIT
-                        82                     CLR     20H.0           ;O bit estava ativado. Reativar a contagem
-                        83                     MOV     A, #0C8H        ;Faz a contagem recomeçar do zero
-                        84                     RET
-                        85     ATIVA_BIT:      SETB    20H.0           ;Seta a flag de parada do programa
-                        86                     RET
-                        87
-                        88                     END
-ASSEMBLY COMPLETE, NO ERRORS FOUND, 2 WARNINGS
+                        80                     ;Executar 4 vezes, para mostrar os 4 dígitos
+0078 BA0304             81     EXIBE:          CJNE    R2, #3H, TESTA_2
+007B E533               82                     MOV     A, 33H                  ;Mostra o MSB
+007D 8012               83                     SJMP    MOSTRA
+                        84
+007F BA0204             85     TESTA_2:        CJNE    R2, #2H, TESTA_1
+0082 E532               86                     MOV     A, 32H                  ;Mostra o MSB-1
+0084 800B               87                     SJMP    MOSTRA
+                        88
+0086 BA0104             89     TESTA_1:        CJNE    R2, #1H, TESTA_0
+0089 E531               90                     MOV     A, 31H                  ;Mostra o LSB+1
+008B 8004               91                     SJMP    MOSTRA
+                        92
+008D E530               93     TESTA_0:        MOV     A, 30H                  ;Mostra o LSB
+008F 8000               94                     SJMP    MOSTRA
+                        95
+0091 93                 96     MOSTRA:         MOVC    A, @A+DPTR
+0092 F590               97                     MOV     P1, A
+                        98
+0094 11A8               99                     ACALL   ATIVA_D7S
+0096 75A000            100                     MOV     P2, #00H
+0099 0B                101                     INC     R3
+009A BB04DB            102                     CJNE    R3, #4H, EXIBE          ;Enquanto não exibir os 4 números, continuar
+009D 22                103                     RET
+009E 3F065B4F66        104     TABELA:         DB      3FH, 06H, 05BH, 4FH, 66H, 6DH, 7DH, 07H, 7FH, 6FH
+     6D7D077F6F
+                       105
+                       106     ;************************************
+                       107     ;Função que ativa o respectivo Display, de acordo com o valor de R2
+00A8 BA0305            108     ATIVA_D7S:      CJNE    R2, #3H, ATIVA_2
+00AB D2A3              109                     SETB    P2.3
+00AD 7A00              110                     MOV     R2, #0
+00AF 22                111                     RET
+                       112
+00B0 BA0204            113     ATIVA_2:        CJNE    R2, #2H, ATIVA_1
+00B3 D2A2              114                     SETB    P2.2
+00B5 0A                115                     INC     R2
+00B6 22                116                     RET
+                       117
+00B7 BA0104            118     ATIVA_1:        CJNE    R2, #1H, ATIVA_0
+00BA D2A1              119                     SETB    P2.1
+00BC 0A                120                     INC     R2
+00BD 22                121                     RET
+                       122
+00BE BA00BE            123     ATIVA_0:        CJNE    R2, #0H, TESTA_2
+00C1 D2A0              124                     SETB    P2.0
+00C3 0A                125                     INC     R2
+00C4 22                126                     RET
+                       127
+                       128     ;**********************************
+                       129     ;Congela o programa e retoma a contagem
+00C5 300007            130     EXT_1:          JNB     20H.0, ATIVA_BIT
+00C8 C200              131                     CLR     20H.0           ;O bit estava ativado. Reativar a contagem
+00CA 7800              132                     MOV     R0, #0H         ;Faz a contagem recomeçar do zero
+00CC 7900              133                     MOV     R1, #0H
+00CE 32                134                     RETI
+00CF D200              135     ATIVA_BIT:      SETB    20H.0           ;Seta a flag de parada do programa
+00D1 32                136                     RETI
+                       137
+                       138
+                       139                     END
+ASSEMBLY COMPLETE, NO ERRORS FOUND, NO WARNINGS
 
-
-ERROR SUMMARY:
-Line 64, ERROR:Symbolnotdefined:ativa_0
-Line 69, ERROR:Labelwasalreadydefined:`testa_0'
 
 SYMBOL TABLE:
 ??MCU_8051_IDE . . . . . . . . . . .  N  NUMB  8051H  NOT USED
@@ -108,16 +153,18 @@ ADCLK. . . . . . . . . . . . . . . .  D  ADDR  00F2H  NOT USED
 ADCON. . . . . . . . . . . . . . . .  D  ADDR  00F3H  NOT USED
 ADDH . . . . . . . . . . . . . . . .  D  ADDR  00F5H  NOT USED
 ADDL . . . . . . . . . . . . . . . .  D  ADDR  00F4H  NOT USED
-ATIVA_1. . . . . . . . . . . . . . .  C  ADDR  006EH
-ATIVA_2. . . . . . . . . . . . . . .  C  ADDR  0068H
-ATIVA_BIT. . . . . . . . . . . . . .  C  ADDR  008FH
-ATIVA_D7S. . . . . . . . . . . . . .  C  ADDR  0062H
+ATIVA_0. . . . . . . . . . . . . . .  C  ADDR  00BEH
+ATIVA_1. . . . . . . . . . . . . . .  C  ADDR  00B7H
+ATIVA_2. . . . . . . . . . . . . . .  C  ADDR  00B0H
+ATIVA_BIT. . . . . . . . . . . . . .  C  ADDR  00CFH
+ATIVA_D7S. . . . . . . . . . . . . .  C  ADDR  00A8H
 AUXR . . . . . . . . . . . . . . . .  D  ADDR  008EH  NOT USED
 AUXR1. . . . . . . . . . . . . . . .  D  ADDR  00A2H  NOT USED
-B. . . . . . . . . . . . . . . . . .  D  ADDR  00F0H  NOT USED
+B. . . . . . . . . . . . . . . . . .  D  ADDR  00F0H
 BDRCON . . . . . . . . . . . . . . .  D  ADDR  009BH  NOT USED
 BDRCON_1 . . . . . . . . . . . . . .  D  ADDR  009CH  NOT USED
 BRL. . . . . . . . . . . . . . . . .  D  ADDR  009AH  NOT USED
+CARRY_CONT . . . . . . . . . . . . .  C  ADDR  0052H
 CCAP0H . . . . . . . . . . . . . . .  D  ADDR  00FAH  NOT USED
 CCAP0L . . . . . . . . . . . . . . .  D  ADDR  00EAH  NOT USED
 CCAP1H . . . . . . . . . . . . . . .  D  ADDR  00FBH  NOT USED
@@ -151,11 +198,13 @@ CKSEL. . . . . . . . . . . . . . . .  D  ADDR  0085H  NOT USED
 CL . . . . . . . . . . . . . . . . .  D  ADDR  00E9H  NOT USED
 CLKREG . . . . . . . . . . . . . . .  D  ADDR  008FH  NOT USED
 CMOD . . . . . . . . . . . . . . . .  D  ADDR  00D9H  NOT USED
+CONV2BCD_R0. . . . . . . . . . . . .  C  ADDR  005DH
+CONV2BCD_R1. . . . . . . . . . . . .  C  ADDR  0068H
 CPRL2. . . . . . . . . . . . . . . .  B  ADDR  00C8H  NOT USED
 CR . . . . . . . . . . . . . . . . .  B  ADDR  00DEH  NOT USED
 CT2. . . . . . . . . . . . . . . . .  B  ADDR  00C9H  NOT USED
 CY . . . . . . . . . . . . . . . . .  B  ADDR  00D7H  NOT USED
-D7S. . . . . . . . . . . . . . . . .  C  ADDR  0036H
+D7S. . . . . . . . . . . . . . . . .  C  ADDR  0073H
 DP0H . . . . . . . . . . . . . . . .  D  ADDR  0083H  NOT USED
 DP0L . . . . . . . . . . . . . . . .  D  ADDR  0082H  NOT USED
 DP1H . . . . . . . . . . . . . . . .  D  ADDR  0085H  NOT USED
@@ -173,9 +222,10 @@ EX0. . . . . . . . . . . . . . . . .  B  ADDR  00A8H  NOT USED
 EX1. . . . . . . . . . . . . . . . .  B  ADDR  00AAH
 EXEN2. . . . . . . . . . . . . . . .  B  ADDR  00CBH  NOT USED
 EXF2 . . . . . . . . . . . . . . . .  B  ADDR  00CEH  NOT USED
+EXIBE. . . . . . . . . . . . . . . .  C  ADDR  0078H
 EXTI0. . . . . . . . . . . . . . . .  C  ADDR  0003H  NOT USED
 EXTI1. . . . . . . . . . . . . . . .  C  ADDR  0013H  NOT USED
-EXT_1. . . . . . . . . . . . . . . .  C  ADDR  0087H
+EXT_1. . . . . . . . . . . . . . . .  C  ADDR  00C5H
 F0 . . . . . . . . . . . . . . . . .  B  ADDR  00D5H  NOT USED
 FE . . . . . . . . . . . . . . . . .  B  ADDR  009FH  NOT USED
 IE . . . . . . . . . . . . . . . . .  D  ADDR  00A8H  NOT USED
@@ -194,8 +244,8 @@ IT1. . . . . . . . . . . . . . . . .  B  ADDR  008AH
 KBE. . . . . . . . . . . . . . . . .  D  ADDR  009DH  NOT USED
 KBF. . . . . . . . . . . . . . . . .  D  ADDR  009EH  NOT USED
 KBLS . . . . . . . . . . . . . . . .  D  ADDR  009CH  NOT USED
-LOOP . . . . . . . . . . . . . . . .  C  ADDR  0031H  NOT USED
-MOSTRA . . . . . . . . . . . . . . .  C  ADDR  0052H
+LOOP . . . . . . . . . . . . . . . .  C  ADDR  0036H
+MOSTRA . . . . . . . . . . . . . . .  C  ADDR  0091H
 OSCCON . . . . . . . . . . . . . . .  D  ADDR  0086H  NOT USED
 OV . . . . . . . . . . . . . . . . .  B  ADDR  00D2H  NOT USED
 P. . . . . . . . . . . . . . . . . .  B  ADDR  00D0H  NOT USED
@@ -234,6 +284,7 @@ RCLK . . . . . . . . . . . . . . . .  B  ADDR  00CDH  NOT USED
 RD . . . . . . . . . . . . . . . . .  B  ADDR  00B7H  NOT USED
 REN. . . . . . . . . . . . . . . . .  B  ADDR  009CH  NOT USED
 RESET. . . . . . . . . . . . . . . .  C  ADDR  0000H  NOT USED
+RESETA . . . . . . . . . . . . . . .  C  ADDR  0057H
 RI . . . . . . . . . . . . . . . . .  B  ADDR  0098H  NOT USED
 RS0. . . . . . . . . . . . . . . . .  B  ADDR  00D3H  NOT USED
 RS1. . . . . . . . . . . . . . . . .  B  ADDR  00D4H  NOT USED
@@ -262,25 +313,26 @@ T0 . . . . . . . . . . . . . . . . .  B  ADDR  00B4H  NOT USED
 T1 . . . . . . . . . . . . . . . . .  B  ADDR  00B5H  NOT USED
 T2CON. . . . . . . . . . . . . . . .  D  ADDR  00C8H  NOT USED
 T2MOD. . . . . . . . . . . . . . . .  D  ADDR  00C9H  NOT USED
-TABELA . . . . . . . . . . . . . . .  C  ADDR  0058H
+TABELA . . . . . . . . . . . . . . .  C  ADDR  009EH
 TB8. . . . . . . . . . . . . . . . .  B  ADDR  009BH  NOT USED
-TC0. . . . . . . . . . . . . . . . .  C  ADDR  007AH
 TCLK . . . . . . . . . . . . . . . .  B  ADDR  00CCH  NOT USED
 TCON . . . . . . . . . . . . . . . .  D  ADDR  0088H  NOT USED
-TESTA_0. . . . . . . . . . . . . . .  C  ADDR  004EH
-TESTA_1. . . . . . . . . . . . . . .  C  ADDR  0047H
-TESTA_2. . . . . . . . . . . . . . .  C  ADDR  0040H
+TESTA_0. . . . . . . . . . . . . . .  C  ADDR  008DH
+TESTA_1. . . . . . . . . . . . . . .  C  ADDR  0086H
+TESTA_2. . . . . . . . . . . . . . .  C  ADDR  007FH
+TESTE. . . . . . . . . . . . . . . .  C  ADDR  0049H
+TESTE2 . . . . . . . . . . . . . . .  C  ADDR  004EH
 TF0. . . . . . . . . . . . . . . . .  B  ADDR  008DH  NOT USED
 TF1. . . . . . . . . . . . . . . . .  B  ADDR  008FH  NOT USED
 TF2. . . . . . . . . . . . . . . . .  B  ADDR  00CFH  NOT USED
-TH0. . . . . . . . . . . . . . . . .  D  ADDR  008CH
+TH0. . . . . . . . . . . . . . . . .  D  ADDR  008CH  NOT USED
 TH1. . . . . . . . . . . . . . . . .  D  ADDR  008DH  NOT USED
 TH2. . . . . . . . . . . . . . . . .  D  ADDR  00CDH  NOT USED
 TI . . . . . . . . . . . . . . . . .  B  ADDR  0099H  NOT USED
 TIMER0 . . . . . . . . . . . . . . .  C  ADDR  000BH  NOT USED
 TIMER1 . . . . . . . . . . . . . . .  C  ADDR  001BH  NOT USED
 TIMER2 . . . . . . . . . . . . . . .  C  ADDR  002BH  NOT USED
-TL0. . . . . . . . . . . . . . . . .  D  ADDR  008AH
+TL0. . . . . . . . . . . . . . . . .  D  ADDR  008AH  NOT USED
 TL1. . . . . . . . . . . . . . . . .  D  ADDR  008BH  NOT USED
 TL2. . . . . . . . . . . . . . . . .  D  ADDR  00CCH  NOT USED
 TMOD . . . . . . . . . . . . . . . .  D  ADDR  0089H  NOT USED
