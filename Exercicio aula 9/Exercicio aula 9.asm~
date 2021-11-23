@@ -25,11 +25,19 @@
 		ORG	0H
 		SJMP	SETUP
 
-SETUP:		
-		MOV	R0, #0H		; Limpa os registradores que conterão o valor Hex ldo
-		MOV	R1, #0H
-		MOV	R2, #0H
-		MOV	R3, #0H
+SETUP:		SETB	EA		;Configura interrupções
+		SETB	EX1
+		SETB	IT1
+
+		MOV	R0, #0H		;Contador menos significativo
+		MOV	R1, #0H		;Contador mais significativo
+		MOV	R2, #0H		;Armazena qual o bit ativo
+		MOV	30H, #0H	;Limpa o buffer
+		MOV	31H, #0H
+		MOV	32H, #0H
+		MOV	33H, #0H
+		MOV	P2, #0FFH	;Limpa os ativadores
+		MOV	P1, #0FFH
 
 LOOP:		ACALL	LE_MEMORIA
 		ACALL	CONV2BCD_R0
