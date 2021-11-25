@@ -2,7 +2,7 @@
 ;*	10770072			       *
 ;***********************************************
 
-; ****************** PROGRAMA ******************
+; ****************** PROGRAMA  1******************
 
 ;Lê caracteres do teclado matricial e exibe em display LDC 2x16
 
@@ -25,7 +25,7 @@ INIC:		MOV	P1, #0FFH
 		MOV	R0, #7FH
 LOOP:		ACALL	VARRE
 		MOV	A, P1
-		ORL	A, #0FFH
+		ORL	A, #0F0H
 		CJNE	A, #0FFH, TECLA
 		SJMP	LOOP
 TECLA:		MOV	A, P1
@@ -108,5 +108,3 @@ POS_LCD:	CLR	RW
 		RET
 
 	END
-
-

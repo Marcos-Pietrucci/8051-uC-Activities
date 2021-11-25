@@ -15,6 +15,10 @@
 ;************************************************
 
 		ORG	0
+		MOV	R2, #0H
+		MOV	R4, #0H
+		MOV	R5, #0H
+		MOV	R6, #0H
 SETUP:		ACALL	INIT_LCD
 		ACALL	CLR_LCD
 		MOV	A, #00	; O simlador não posiciona o cursos na posição 0
@@ -25,16 +29,49 @@ INIC:		MOV	P1, #0FFH
 		MOV	R0, #7FH
 LOOP:		ACALL	VARRE
 		MOV	A, P1
-		ORL	A, #0FFH
+		ORL	A, #0F0H
 		CJNE	A, #0FFH, TECLA
 		SJMP	LOOP
 TECLA:		MOV	A, P1
 		ACALL	ASCII_TECLA
+		MOV	R2, A		;Preserva o valor do ACC
+		MOV	A, R7
+		MOV	R3, A		;Transfere de R7 para R3
+		MOV	A, R2		;Retorna o valor do ACC
 		ACALL	WRITE_TEXT
 
 ESPERA:		MOV	A, P1		;Trava o programa aqui até que a chave seja aberta
 		ORL	A, #0F0H
 		CJNE	A, #0FFH, ESPERA
+		INC	R4
+
+		CJNE	R4, #1H, TESTA_DOIS
+		;Armazena o primeiro numero lido
+		MOV	A, R3
+		MOV	R5, A
+		;Escreve o sinal de +
+		MOV	A, #'+'
+		ACALL	WRITE_TEXT
+
+TESTA_DOIS:	CJNE	R4, #2H, INIC
+		;Amazena o segundo numero lido
+		MOV	A, R3
+		MOV	R6, A
+
+		;Escreve o sinal de =
+		MOV	A, #'='
+		ACALL	WRITE_TEXT
+
+		;Faz a soma
+		MOV	A, R6
+		ADD	A, R5
+
+		;Transforma o numero em ASCII
+		ADD	A, #30H
+		ACALL	WRITE_TEXT
+		ACALL	CLR_LCD
+		MOV		A, #0H
+		ACALL	POS_LCD		;Reinicia LCD e a contagem
 		SJMP	INIC
 
 ;**************************************************
@@ -84,7 +121,7 @@ INIT_LCD:	CLR	RW
 		MOV	DAT, #38H	;2x16 e matriz 5x7
 		CLR	ENAB
 		SETB	ENAB
-		MOV	ADAT, #0EH	;Display on/off
+		MOV	DAT, #0EH	;Display on/off
 		CLR	ENAB
 		SETB	ENAB
 		MOV	DAT, #06H	;Modo de entrada
@@ -108,5 +145,4 @@ POS_LCD:	CLR	RW
 		RET
 
 	END
-
 
