@@ -3,7 +3,7 @@
 ;*	10770072			       *
 ;***********************************************
 
-; ****************** PROGRAMA ***************
+; ****************** PROGRAMA ******************
 
 ; Para armazenar o valor dos displays, usarei os registradores
 ;	1000H - R0
@@ -12,7 +12,7 @@
 ;	4000H - R3
 
 ; R1 para os 2 mais significativos, R2 para os 2 leds menos significativos
-; Buffer: XDATA       
+; Buffer: XDATA
 ;	  8000   D7S-0
 ;	  8100   D7S-1
 ;	  8200   D7S-2
@@ -25,7 +25,7 @@
 		ORG	0H
 		SJMP	SETUP
 
-SETUP:		
+SETUP:
 		MOV	R0, #0H		; Limpa os registradores que conterão o valor Hex ldo
 		MOV	R1, #0H
 		MOV	R2, #0H
