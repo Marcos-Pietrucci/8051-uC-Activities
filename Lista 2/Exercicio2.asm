@@ -3,7 +3,9 @@
 ; Exercício 2
 
 ; Uso de conversor ADC0808
-; Será considerado seleção de canal com mapeamento de memória
+; Segundo o esquematico dado:
+;	Canais: Escrever nas posições 01H, 02H, 03H, ... 07H
+;	Leitura: Ler as posições 01H, 02H, 03H, ... 07H
 
 
 ;*****   EQUs
@@ -52,7 +54,7 @@ PROG:		;Configuração de interrupções
 		MOV	31H, #00H
 		MOV	R0, #0H
 		MOV	R1, #0H		;Armazena o valor
-		MOV	DPTR, #7FFFH
+		MOV	DPTR, #0H
 
 LOOP:		;Loop principal do programa
 		ACALL	SEL_CANAL		;Seleciona o canal e corrige R1
@@ -236,15 +238,16 @@ PRINT_INFO:
 ;**********************************************
 ;Subrotina ativada pelo timer 0. Lê o A/D
 SUB_AD:		CLR	EA
-		MOV	R0, P1			;Armazena o valor lido
+		;Armazena o valor lido
+		MOVX	A, @DPTR
+		MOV	R0, A			
 		SETB	EA
 		RETI
 ;**********************************************
 ;Subrotina que seleciona canal
 SEL_CANAL:	CJNE	R1, #8H, CONT
 		MOV	R1, #0H
-		MOV	DPTR, #7FFFH
-
+		MOV	DPTR, #0H
 CONT:		INC	DPTR
 		MOVX	@DPTR, A
 		RET

@@ -55,204 +55,201 @@ Exercicio2                                                                      
 003B 7900               54                     MOV     R1, #0H         ;Armazena o valor
 003D 907FFF             55                     MOV     DPTR, #7FFFH
                         56
-                        57                     ;Loop principal do programa
-                        58
-                        59     LOOP:
-0040 3187               60                     ACALL   SEL_CANAL               ;Seleciona o canal e corrige R1
-                        61
-                        62                     ;Lê o Buffer e escreve no display
-0042 1151               63                     ACALL   Conv2Digital    ;Converte o que está em R0 para BCD. Já armazena no buffer
-0044 11E4               64                     ACALL   PRINT_APRES
-0046 3175               65                     ACALL   PRINT_INFO
-                        66
-                        67
-                        68                     ;Limpar LCD
-0048 11C0               69                     ACALL   CLR_LCD
-004A 7400               70                     MOV     A,#00H
-004C 11CC               71                     ACALL   POS_LCD
-004E 09                 72                     INC     R1
-004F 80EF               73                     SJMP    LOOP
-                        74
-                        75     ;**********************************
-                        76     ;Função que converte o número no registrador R0 em BCD
-0051 E8                 77     Conv2Digital:   MOV     A, R0
-0052 B40005             78                     CJNE    A, #0H,Test1
-0055 753000             79                     MOV     30H, #0H                        ;Tensão é 0
-0058 804B               80                     SJMP    RETURN
-005A B41705             81     Test1:          CJNE    A, #17H,Test2
-005D 753001             82                     MOV     30H, #1H                        ;Tensão é 1v
-0060 8043               83                     SJMP    RETURN
-0062 B42E05             84     Test2:          CJNE    A, #2EH,Test3
-0065 753002             85                     MOV     30H, #2H                        ;Tensão é 2v
-0068 803B               86                     SJMP    RETURN
-006A B44505             87     Test3:          CJNE    A, #45H,Test4
-006D 753003             88                     MOV     30H, #3H                        ;Tensão é 3V
-0070 8033               89                     SJMP    RETURN
-0072 B45C05             90     Test4:          CJNE    A, #5CH,Test5
-0075 753004             91                     MOV     30H, #4H                        ;Tensão é 4V
-0078 802B               92                     SJMP    RETURN
-007A B47305             93     Test5:          CJNE    A, #73H,Test6
-007D 753005             94                     MOV     30H, #5H                        ;Tensão é 5V
-0080 8023               95                     SJMP    RETURN
-0082 B48A05             96     Test6:          CJNE    A, #8AH,Test7
-0085 753006             97                     MOV     30H, #6H                        ;Tensão é 6V
-0088 801B               98                     SJMP    RETURN
-008A B4A105             99     Test7:          CJNE    A, #0A1H,Test8
-008D 753007            100                     MOV     30H, #7H                        ;Tensão é 7V
-0090 8013              101                     SJMP    RETURN
-0092 B4B805            102     Test8:          CJNE    A, #0B8H,Test9
-0095 753008            103                     MOV     30H, #8H                        ;Tensão é 8V
-0098 800B              104                     SJMP    RETURN
-009A B4CF05            105     Test9:          CJNE    A, #0CFH,Test10
-009D 753009            106                     MOV     30H, #9H                        ;Tensão é 9V
-00A0 8003              107                     SJMP    RETURN
-00A2 75300A            108     Test10:         MOV     30H, #0AH                       ;Tensão é 10V
+                        57     LOOP:           ;Loop principal do programa
+0040 3187               58                     ACALL   SEL_CANAL               ;Seleciona o canal e corrige R1
+                        59
+                        60                     ;Lê o Buffer e escreve no display
+0042 1151               61                     ACALL   Conv2Digital    ;Converte o que está em R0 para BCD. Já armazena no buffer
+0044 11E4               62                     ACALL   PRINT_APRES
+0046 3175               63                     ACALL   PRINT_INFO
+                        64
+                        65                     ;Limpar LCD
+0048 11C0               66                     ACALL   CLR_LCD
+004A 7400               67                     MOV     A,#00H
+004C 11CC               68                     ACALL   POS_LCD
+004E 09                 69                     INC     R1
+004F 80EF               70                     SJMP    LOOP
+                        71
+                        72     ;**********************************
+                        73     ;Função que converte o número no registrador R0 em BCD
+0051 E8                 74     Conv2Digital:   MOV     A, R0
+0052 B40005             75                     CJNE    A, #0H,Test1
+0055 753000             76                     MOV     30H, #0H                        ;Tensão é 0
+0058 804B               77                     SJMP    RETURN
+005A B41705             78     Test1:          CJNE    A, #17H,Test2
+005D 753001             79                     MOV     30H, #1H                        ;Tensão é 1v
+0060 8043               80                     SJMP    RETURN
+0062 B42E05             81     Test2:          CJNE    A, #2EH,Test3
+0065 753002             82                     MOV     30H, #2H                        ;Tensão é 2v
+0068 803B               83                     SJMP    RETURN
+006A B44505             84     Test3:          CJNE    A, #45H,Test4
+006D 753003             85                     MOV     30H, #3H                        ;Tensão é 3V
+0070 8033               86                     SJMP    RETURN
+0072 B45C05             87     Test4:          CJNE    A, #5CH,Test5
+0075 753004             88                     MOV     30H, #4H                        ;Tensão é 4V
+0078 802B               89                     SJMP    RETURN
+007A B47305             90     Test5:          CJNE    A, #73H,Test6
+007D 753005             91                     MOV     30H, #5H                        ;Tensão é 5V
+0080 8023               92                     SJMP    RETURN
+0082 B48A05             93     Test6:          CJNE    A, #8AH,Test7
+0085 753006             94                     MOV     30H, #6H                        ;Tensão é 6V
+0088 801B               95                     SJMP    RETURN
+008A B4A105             96     Test7:          CJNE    A, #0A1H,Test8
+008D 753007             97                     MOV     30H, #7H                        ;Tensão é 7V
+0090 8013               98                     SJMP    RETURN
+0092 B4B805             99     Test8:          CJNE    A, #0B8H,Test9
+0095 753008            100                     MOV     30H, #8H                        ;Tensão é 8V
+0098 800B              101                     SJMP    RETURN
+009A B4CF05            102     Test9:          CJNE    A, #0CFH,Test10
+009D 753009            103                     MOV     30H, #9H                        ;Tensão é 9V
+00A0 8003              104                     SJMP    RETURN
+00A2 75300A            105     Test10:         MOV     30H, #0AH                       ;Tensão é 10V
+                       106
+00A5 22                107     RETURN:         RET
+                       108
                        109
-00A5 22                110     RETURN:         RET
-                       111
-                       112
-                       113     ;**********************************************
-                       114     ;*************************************************
-                       115     ;Subrotina que liga e configura o LCD
-00A6 C2B4              116     INIT_LCD:       CLR     RW
-00A8 C2B4              117                     CLR     RS
-00AA D2B2              118                     SETB    ENAB
-00AC 75A038            119                     MOV     DAT, #38H       ;2x16 e matriz 5x7
-00AF C2B2              120                     CLR     ENAB
-00B1 D2B2              121                     SETB    ENAB
-00B3 75A00E            122                     MOV     DAT, #0EH       ;Display on/off
-00B6 C2B2              123                     CLR     ENAB
-00B8 D2B2              124                     SETB    ENAB
-00BA 75A006            125                     MOV     DAT, #06H       ;Modo de entrada
-00BD C2B2              126                     CLR     ENAB
-00BF 22                127                     RET
-                       128
-                       129     ;**************************************************
-00C0 C2B4              130     CLR_LCD:        CLR     RW
-00C2 C2B4              131                     CLR     RS
-00C4 D2B2              132                     SETB    ENAB
-00C6 75A001            133                     MOV     DAT, #01H
-00C9 C2B2              134                     CLR     ENAB
-00CB 22                135                     RET
-                       136     ;**************************************************
-00CC C2B4              137     POS_LCD:        CLR     RW
-00CE C2B4              138                     CLR     RS
-00D0 D2B2              139                     SETB    ENAB
-00D2 2480              140                     ADD     A, #80H
-00D4 F5A0              141                     MOV     DAT, A
-00D6 C2B2              142                     CLR     ENAB
-00D8 22                143                     RET
-                       144
-                       145     ;**************************************************
-                       146     ;Subrotina que mostra um caractere ASCII no LCD
-00D9 C2B4              147     WRITE_TEXT:     CLR     RW      ;Modo de escrtia
-00DB D2B4              148                     SETB    RS      ;Dado a ser enviado
-00DD D2B2              149                     SETB    ENAB
-00DF F5A0              150                     MOV     DAT, A
-00E1 C2B2              151                     CLR     ENAB    ;Pulso no enable
-00E3 22                152                     RET
-                       153
-                       154     ;**************************************************
-                       155     ;VALOR ANALOGICO DA TENSAO NO SENSOR
-00E4 7456              156     PRINT_APRES:    MOV     A, #'V'
-00E6 11D9              157                     ACALL   WRITE_TEXT
-00E8 7441              158                     MOV     A, #'A'
-00EA 11D9              159                     ACALL   WRITE_TEXT
-00EC 744C              160                     MOV      A, #'L'
-00EE 11D9              161                     ACALL   WRITE_TEXT
-00F0 744F              162                     MOV     A, #'O'
-00F2 11D9              163                     ACALL   WRITE_TEXT
-00F4 7452              164                     MOV     A, #'R'
-00F6 11D9              165                     ACALL   WRITE_TEXT
-00F8 7420              166                     MOV     A, #' '
-00FA 11D9              167                     ACALL   WRITE_TEXT
-00FC 7441              168                     MOV      A, #'A'
-00FE 11D9              169                     ACALL   WRITE_TEXT
-0100 744E              170                     MOV     A, #'N'
-0102 11D9              171                     ACALL   WRITE_TEXT
-0104 7441              172                     MOV     A, #'A'
-0106 11D9              173                     ACALL   WRITE_TEXT
-0108 744C              174                     MOV      A, #'L'
-010A 11D9              175                     ACALL   WRITE_TEXT
-010C 744F              176                     MOV     A, #'O'
-010E 11D9              177                     ACALL   WRITE_TEXT
-0110 7447              178                     MOV     A, #'G'
-0112 11D9              179                     ACALL   WRITE_TEXT
-0114 7449              180                     MOV     A, #'I'
-0116 11D9              181                     ACALL   WRITE_TEXT
-0118 7443              182                     MOV     A, #'C'
-011A 11D9              183                     ACALL   WRITE_TEXT
-011C 744F              184                     MOV     A, #'O'
-011E 11D9              185                     ACALL   WRITE_TEXT
-0120 7420              186                     MOV      A, #' '
-0122 11D9              187                     ACALL   WRITE_TEXT
-0124 7444              188                     MOV     A, #'D'
-0126 11D9              189                     ACALL   WRITE_TEXT
-0128 7441              190                     MOV      A, #'A'
-012A 11D9              191                     ACALL   WRITE_TEXT
-012C 7420              192                     MOV     A, #' '
-012E 11D9              193                     ACALL   WRITE_TEXT
-0130 7454              194                     MOV      A, #'T'
-0132 11D9              195                     ACALL   WRITE_TEXT
-0134 7445              196                     MOV      A, #'E'
-0136 11D9              197                     ACALL   WRITE_TEXT
-0138 744E              198                     MOV     A, #'N'
-013A 11D9              199                     ACALL   WRITE_TEXT
-013C 7453              200                     MOV      A, #'S'
-013E 11D9              201                     ACALL   WRITE_TEXT
-0140 7441              202                     MOV      A, #'A'
-0142 11D9              203                     ACALL   WRITE_TEXT
-0144 744F              204                     MOV     A, #'O'
-0146 11D9              205                     ACALL   WRITE_TEXT
-0148 7420              206                     MOV     A, #' '
-014A 11D9              207                     ACALL   WRITE_TEXT
-014C 744E              208                     MOV     A, #'N'
-014E 11D9              209                     ACALL   WRITE_TEXT
-0150 744F              210                     MOV      A, #'O'
-0152 11D9              211                     ACALL   WRITE_TEXT
-0154 7420              212                     MOV      A, #' '
-0156 11D9              213                     ACALL   WRITE_TEXT
-0158 7453              214                     MOV      A, #'S'
-015A 11D9              215                     ACALL   WRITE_TEXT
-015C 7445              216                     MOV     A, #'E'
-015E 11D9              217                     ACALL   WRITE_TEXT
-0160 744E              218                     MOV     A, #'N'
-0162 11D9              219                     ACALL   WRITE_TEXT
-0164 7453              220                     MOV     A, #'S'
-0166 11D9              221                     ACALL   WRITE_TEXT
-0168 744F              222                     MOV     A, #'O'
-016A 11D9              223                     ACALL   WRITE_TEXT
-016C 7452              224                     MOV     A, #'R'
-016E 11D9              225                     ACALL   WRITE_TEXT
-0170 7420              226                     MOV     A, #' '
-0172 11D9              227                     ACALL   WRITE_TEXT
-                       228
-0174 22                229                     RET
-                       230     ;**********************************************
-                       231     PRINT_INFO:
-0175 E9                232                     MOV     A, R1           ;Indica o canal, o sensor
-0176 11D9              233                     ACALL   WRITE_TEXT
-0178 743D              234                     MOV     A, #'='
-017A 11D9              235                     ACALL   WRITE_TEXT
-017C E8                236                     MOV     A,R0            ;Indica o valor lido
-017D 11D9              237                     ACALL   WRITE_TEXT
-017F 22                238                     RET
-                       239     ;**********************************************
-                       240     ;Subrotina ativada pelo timer 0. Lê o A/D
-0180 C2AF              241     SUB_AD:         CLR     EA
-0182 A890              242                     MOV     R0, P1                  ;Armazena o valor lido
-0184 D2AF              243                     SETB    EA
-0186 32                244                     RETI
-                       245     ;**********************************************
-                       246     ;Subrotina que seleciona canal
-0187 B90805            247     SEL_CANAL:      CJNE    R1, #8H, CONT
-018A 7900              248                     MOV     R1, #0H
-018C 907FFF            249                     MOV     DPTR, #7FFFH
-                       250
-018F A3                251     CONT:           INC     DPTR
-0190 F0                252                     MOVX    @DPTR, A
-0191 22                253                     RET
-                       254                     END
+                       110     ;**********************************************
+                       111     ;*************************************************
+                       112     ;Subrotina que liga e configura o LCD
+00A6 C2B4              113     INIT_LCD:       CLR     RW
+00A8 C2B4              114                     CLR     RS
+00AA D2B2              115                     SETB    ENAB
+00AC 75A038            116                     MOV     DAT, #38H       ;2x16 e matriz 5x7
+00AF C2B2              117                     CLR     ENAB
+00B1 D2B2              118                     SETB    ENAB
+00B3 75A00E            119                     MOV     DAT, #0EH       ;Display on/off
+00B6 C2B2              120                     CLR     ENAB
+00B8 D2B2              121                     SETB    ENAB
+00BA 75A006            122                     MOV     DAT, #06H       ;Modo de entrada
+00BD C2B2              123                     CLR     ENAB
+00BF 22                124                     RET
+                       125
+                       126     ;**************************************************
+00C0 C2B4              127     CLR_LCD:        CLR     RW
+00C2 C2B4              128                     CLR     RS
+00C4 D2B2              129                     SETB    ENAB
+00C6 75A001            130                     MOV     DAT, #01H
+00C9 C2B2              131                     CLR     ENAB
+00CB 22                132                     RET
+                       133     ;**************************************************
+00CC C2B4              134     POS_LCD:        CLR     RW
+00CE C2B4              135                     CLR     RS
+00D0 D2B2              136                     SETB    ENAB
+00D2 2480              137                     ADD     A, #80H
+00D4 F5A0              138                     MOV     DAT, A
+00D6 C2B2              139                     CLR     ENAB
+00D8 22                140                     RET
+                       141
+                       142     ;**************************************************
+                       143     ;Subrotina que mostra um caractere ASCII no LCD
+00D9 C2B4              144     WRITE_TEXT:     CLR     RW      ;Modo de escrtia
+00DB D2B4              145                     SETB    RS      ;Dado a ser enviado
+00DD D2B2              146                     SETB    ENAB
+00DF F5A0              147                     MOV     DAT, A
+00E1 C2B2              148                     CLR     ENAB    ;Pulso no enable
+00E3 22                149                     RET
+                       150
+                       151     ;**************************************************
+                       152     ;VALOR ANALOGICO DA TENSAO NO SENSOR
+00E4 7456              153     PRINT_APRES:    MOV     A, #'V'
+00E6 11D9              154                     ACALL   WRITE_TEXT
+00E8 7441              155                     MOV     A, #'A'
+00EA 11D9              156                     ACALL   WRITE_TEXT
+00EC 744C              157                     MOV      A, #'L'
+00EE 11D9              158                     ACALL   WRITE_TEXT
+00F0 744F              159                     MOV     A, #'O'
+00F2 11D9              160                     ACALL   WRITE_TEXT
+00F4 7452              161                     MOV     A, #'R'
+00F6 11D9              162                     ACALL   WRITE_TEXT
+00F8 7420              163                     MOV     A, #' '
+00FA 11D9              164                     ACALL   WRITE_TEXT
+00FC 7441              165                     MOV      A, #'A'
+00FE 11D9              166                     ACALL   WRITE_TEXT
+0100 744E              167                     MOV     A, #'N'
+0102 11D9              168                     ACALL   WRITE_TEXT
+0104 7441              169                     MOV     A, #'A'
+0106 11D9              170                     ACALL   WRITE_TEXT
+0108 744C              171                     MOV      A, #'L'
+010A 11D9              172                     ACALL   WRITE_TEXT
+010C 744F              173                     MOV     A, #'O'
+010E 11D9              174                     ACALL   WRITE_TEXT
+0110 7447              175                     MOV     A, #'G'
+0112 11D9              176                     ACALL   WRITE_TEXT
+0114 7449              177                     MOV     A, #'I'
+0116 11D9              178                     ACALL   WRITE_TEXT
+0118 7443              179                     MOV     A, #'C'
+011A 11D9              180                     ACALL   WRITE_TEXT
+011C 744F              181                     MOV     A, #'O'
+011E 11D9              182                     ACALL   WRITE_TEXT
+0120 7420              183                     MOV      A, #' '
+0122 11D9              184                     ACALL   WRITE_TEXT
+0124 7444              185                     MOV     A, #'D'
+0126 11D9              186                     ACALL   WRITE_TEXT
+0128 7441              187                     MOV      A, #'A'
+012A 11D9              188                     ACALL   WRITE_TEXT
+012C 7420              189                     MOV     A, #' '
+012E 11D9              190                     ACALL   WRITE_TEXT
+0130 7454              191                     MOV      A, #'T'
+0132 11D9              192                     ACALL   WRITE_TEXT
+0134 7445              193                     MOV      A, #'E'
+0136 11D9              194                     ACALL   WRITE_TEXT
+0138 744E              195                     MOV     A, #'N'
+013A 11D9              196                     ACALL   WRITE_TEXT
+013C 7453              197                     MOV      A, #'S'
+013E 11D9              198                     ACALL   WRITE_TEXT
+0140 7441              199                     MOV      A, #'A'
+0142 11D9              200                     ACALL   WRITE_TEXT
+0144 744F              201                     MOV     A, #'O'
+0146 11D9              202                     ACALL   WRITE_TEXT
+0148 7420              203                     MOV     A, #' '
+014A 11D9              204                     ACALL   WRITE_TEXT
+014C 744E              205                     MOV     A, #'N'
+014E 11D9              206                     ACALL   WRITE_TEXT
+0150 744F              207                     MOV      A, #'O'
+0152 11D9              208                     ACALL   WRITE_TEXT
+0154 7420              209                     MOV      A, #' '
+0156 11D9              210                     ACALL   WRITE_TEXT
+0158 7453              211                     MOV      A, #'S'
+015A 11D9              212                     ACALL   WRITE_TEXT
+015C 7445              213                     MOV     A, #'E'
+015E 11D9              214                     ACALL   WRITE_TEXT
+0160 744E              215                     MOV     A, #'N'
+0162 11D9              216                     ACALL   WRITE_TEXT
+0164 7453              217                     MOV     A, #'S'
+0166 11D9              218                     ACALL   WRITE_TEXT
+0168 744F              219                     MOV     A, #'O'
+016A 11D9              220                     ACALL   WRITE_TEXT
+016C 7452              221                     MOV     A, #'R'
+016E 11D9              222                     ACALL   WRITE_TEXT
+0170 7420              223                     MOV     A, #' '
+0172 11D9              224                     ACALL   WRITE_TEXT
+                       225
+0174 22                226                     RET
+                       227     ;**********************************************
+                       228     PRINT_INFO:
+0175 E9                229                     MOV     A, R1           ;Indica o canal, o sensor
+0176 11D9              230                     ACALL   WRITE_TEXT
+0178 743D              231                     MOV     A, #'='
+017A 11D9              232                     ACALL   WRITE_TEXT
+017C E8                233                     MOV     A,R0            ;Indica o valor lido
+017D 11D9              234                     ACALL   WRITE_TEXT
+017F 22                235                     RET
+                       236     ;**********************************************
+                       237     ;Subrotina ativada pelo timer 0. Lê o A/D
+0180 C2AF              238     SUB_AD:         CLR     EA
+0182 A890              239                     MOV     R0, P1                  ;Armazena o valor lido
+0184 D2AF              240                     SETB    EA
+0186 32                241                     RETI
+                       242     ;**********************************************
+                       243     ;Subrotina que seleciona canal
+0187 B90805            244     SEL_CANAL:      CJNE    R1, #8H, CONT
+018A 7900              245                     MOV     R1, #0H
+018C 907FFF            246                     MOV     DPTR, #7FFFH
+                       247
+018F A3                248     CONT:           INC     DPTR
+0190 F0                249                     MOVX    @DPTR, A
+0191 22                250                     RET
+                       251                     END
 ASSEMBLY COMPLETE, NO ERRORS FOUND, NO WARNINGS
 
 

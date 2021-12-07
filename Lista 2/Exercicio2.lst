@@ -53,7 +53,7 @@ Exercicio2                                                                      
 0036 753100             52                     MOV     31H, #00H
 0039 7800               53                     MOV     R0, #0H
 003B 7900               54                     MOV     R1, #0H         ;Armazena o valor
-003D 907FFF             55                     MOV     DPTR, #7FFFH
+003D 900000             55                     MOV     DPTR, #0H
                         56
                         57     LOOP:           ;Loop principal do programa
 0040 3187               58                     ACALL   SEL_CANAL               ;Seleciona o canal e corrige R1
@@ -244,12 +244,11 @@ Exercicio2                                                                      
                        243     ;Subrotina que seleciona canal
 0187 B90805            244     SEL_CANAL:      CJNE    R1, #8H, CONT
 018A 7900              245                     MOV     R1, #0H
-018C 907FFF            246                     MOV     DPTR, #7FFFH
-                       247
-018F A3                248     CONT:           INC     DPTR
-0190 F0                249                     MOVX    @DPTR, A
-0191 22                250                     RET
-                       251                     END
+018C 900000            246                     MOV     DPTR, #0H
+018F A3                247     CONT:           INC     DPTR
+0190 F0                248                     MOVX    @DPTR, A
+0191 22                249                     RET
+                       250                     END
 ASSEMBLY COMPLETE, NO ERRORS FOUND, NO WARNINGS
 
 

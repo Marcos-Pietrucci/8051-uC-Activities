@@ -11,7 +11,7 @@
 
 ;*********************************************
 		ORG	03H
-		SJMP	SUB_AD
+		SJMP	SUB_AD	;Ativado pelo timer. Lê o valor
 ;********************************************
 		ORG	0BH	;Clock do A/D DE 100us
 		CLR	EA
@@ -98,7 +98,7 @@ continua:	CLR	P1.7
 		RETI
 ;**********************************************
 ;Subrotina que seleciona canal
-SEL_CANAL:	MOV	DPTR, #8001H
+SEL_CANAL:	MOV	DPTR, #0001H
 		MOVX	@DPTR, A
 		RET
 		END
