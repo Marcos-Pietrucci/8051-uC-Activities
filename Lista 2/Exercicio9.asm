@@ -104,7 +104,7 @@ LIBERAR_1:
 		MOVC	A, @A+DPTR
 
 		;A agora contem o codigo D7S do numero 1
-		MOV	DPTR, #800H	;Codigo do D7S
+		MOV	DPTR, #8000H	;Codigo do D7S
 		MOVX	@DPTR, A
 
 		JMP	INIC
