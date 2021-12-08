@@ -15,11 +15,13 @@
 		SETB	P3.2	;Apaga leds
 		SETB	P3.4
 
-Volta:
+Volta:	
+		ACALL	INIC
+		ACALL	amzna_tecla
+		SJMP	Volta
 
 ;**************** LEITURA DO PAINEL *************
-INIC:		ACALL	DELAY	;Mais conforto ao ler
-		MOV	P1,#0FFH
+INIC:	
 		MOV	R0, #7FH
 LOOP:		ACALL	VARRE
 		MOV	DPTR, #6000H
@@ -107,7 +109,7 @@ LIBERAR_1:
 		MOV	DPTR, #8000H	;Codigo do D7S
 		MOVX	@DPTR, A
 
-		JMP	INIC
+		JMP	Volta
 TABELA:		DB	3FH, 06H, 05BH, 4FH, 66H, 6DH, 7DH, 07H, 7FH, 6FH
 ;***************************************************************
 ;Executa as ações após liberar
@@ -120,7 +122,7 @@ LIBERAR_2:
 		MOV	DPTR, #800H	;Codigo do D7S
 		MOVX	@DPTR, A
 
-		JMP	INIC
+		JMP	Volta
 ;****************************************************************
 ;Senha errada digitada
 ERRO:

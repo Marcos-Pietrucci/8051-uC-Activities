@@ -20,7 +20,7 @@ MAIN:	SETB	EA
 
 LOOP:	MOV	R1, 30H
 	ACALL	Mostra_D7S
-
+	SJMP	LOOP
 
 ;************************************************
 Mostra_D7S:
