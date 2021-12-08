@@ -6,7 +6,7 @@
 ;LED no P3.2 e P3.4
 
 	ORG	0
-	CLR	20H.0	;Vai determinar o estado, se reiniciado ou nao
+	
 	;Armazena os digitos inseridos
 	MOV	R2, #0H
 	MOV	R3, #0H
@@ -61,7 +61,6 @@ outro1:		CJNE	R4, #0H, outro2
 outro2:		;Se chegou aqui, o R5 esta disponivel. Armazenar
 		MOV	R5, A
 
-		SETB	EA		;Libera o botao secreto
 		SJMP	COMPARAR
 
 ; 0   1   2  3 4  5  6  7  8 9   A  B  C D   E  F

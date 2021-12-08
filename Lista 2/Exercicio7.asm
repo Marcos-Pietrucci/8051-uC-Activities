@@ -8,10 +8,6 @@
 	ORG	003H
 	SJMP	SUB_AD
 ;*****************************************
-	ORG	00BH
-	CPL	P3.1
-	RETI
-;*****************************************
 PROG:	SETB	EA
 	SETB	ET0
 	SETB	EX0
@@ -21,22 +17,22 @@ PROG:	SETB	EA
 	SETB	TR0
 	MOV	30H, #00
 	ACALL	SEL_CANAL
-LOOP:	MOV	A, 30H
-	MOV	DPTR, #8000H
+LOOP:	MOV	A, 30H		;Carrega o valor lido
+	MOV	DPTR, #0E000H	;Envia o valor para DA
 	MOVX	@DPTR, A
 	SJMP	LOOP
 
 ;*****************************************
 SUB_AD:	CLR	EA
-	MOV	DPTR, #8000H
-	MOVX	A, @DPTR
-	MOV	30H, A
+	MOV	DPTR, #0A000H 	;Endereço que ativa a leitura
+	MOVX	A, @DPTR  	; Lê o valor do AD
+	MOV	30H, A		;Armazena
 	SETB	EA
 	ACALL	SEL_CANAL
 	RETI
 ;*****************************************
 SEL_CANAL:
-	MOV	DPTR, #8007H ; SELECIONA O CANAL 7
+	MOV	DPTR, #0007H ; SELECIONA O CANAL 7
 	MOVX	@DPTR, A
 	RET
 	END

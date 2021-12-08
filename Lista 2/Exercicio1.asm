@@ -36,7 +36,6 @@ PROG:		;Configuração de interrupções
 		MOV	30H,#00H	;Zerar o buffer
 		MOV	31H, #00H
 		MOV	R0, #0H
-		ACALL	SEL_CANAL
 
 		;Loop principal do programa
 LOOP:
@@ -96,9 +95,5 @@ continua:	CLR	P1.7
 		MOV	R0, P1			;Armazena o valor do primeiro bit
 		SETB	EA
 		RETI
-;**********************************************
-;Subrotina que seleciona canal
-SEL_CANAL:	MOV	DPTR, #8001H
-		MOVX	@DPTR, A
-		RET
+
 		END

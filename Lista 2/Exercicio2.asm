@@ -28,7 +28,7 @@
 		CLR	EA
 		MOV	TH0, #0FFH
 		MOV	TL0, #09CH
-		CPL	P3.6
+		CPL	P3.5
 		SETB	EA
 		RETI
 ;*********************************************
